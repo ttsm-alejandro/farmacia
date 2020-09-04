@@ -10,10 +10,6 @@ miApp.controller( 'mainPageCtrl' , function( $scope ){
     //URL
     $scope.relativeUrl = "";
     
-    //oficial colors
-    $scope.ttsmBlueColor = ttsmBlueColor ;
-    $scope.ttsmGrayColor = ttsmGrayColor ;
-    
     //variables
     $scope.user = "";
     $scope.token = "";
