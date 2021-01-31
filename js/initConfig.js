@@ -7,4 +7,8 @@
 //var serviceUrl = "http://www.yourdomain.com.mx/";
 
 //LOCALHOST
-var serviceUrl = "http://localhost/git-farmacia/";
+var serviceUrl = "http://localhost/farmacia/";
+
+//colors
+var oficialBlueColor = "#061f5c";
+var oficialGrayColor = "#969494";

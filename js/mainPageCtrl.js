@@ -13,4 +13,15 @@ miApp.controller( 'mainPageCtrl' , function( $scope ){
     //variables
     $scope.user = "";
     $scope.token = "";
+    
+    //
+    $scope.arrayDatos = [
+        "Nombre",
+        "Direccion",
+        "Telefono",
+        "Datos" 
+    ];
+    
+    $scope.modelo = "";
+    
 });

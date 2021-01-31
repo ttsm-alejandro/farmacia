@@ -1,0 +1,62 @@
+<!--
+Company:    Tokyo Boeki Techno-System de Mexico S.A. de C.V. 
+Programmer: Alejandro Aguayo Acosta
+-->
+<!-- MODAL TEXTAREA SYSTEM-MACHINE -->
+<div class="modal fade" id="sharepointTextAreaInModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h2 class="modal-title">{{ textAreaOnModalTitle }}</h2>
+            </div>
+            
+            <!-- Please Wait -->
+            <div ng-show="showPleaseWaitMessage">
+                <div class="modal-body">
+                    <h1 style="text-align: center" ><br><br>Please wait...<br><br><br></h1>
+                </div>
+            </div>
+            
+            <!-- Textareas -->
+            <div ng-show="!showPleaseWaitMessage">
+                <!-- System Details -->
+                <div ng-show="showTextAreaOnModal[0]">
+                    <div class="modal-body">
+                        <textarea ng-model="systemDetail.detail" rows="20" class="form-control">
+                        </textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" ng-click="updateOrSaveSystemDetail()">SAVE</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">CLOSE</button>
+                    </div>
+                </div>
+
+                <!-- System Comment -->
+                <div ng-show="showTextAreaOnModal[1]">
+                    <div class="modal-body">
+                        <textarea ng-model="systemDetail.comment" rows="20" class="form-control">
+                        </textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" ng-click="updateOrSaveSystemDetail()">SAVE</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">CLOSE</button>
+                    </div>
+                </div>
+
+                <!-- Machine Comment -->
+                <div ng-show="showTextAreaOnModal[2]">
+                    <div class="modal-body">
+                        <textarea ng-model="machineDetail.comment" rows="20" class="form-control" >
+                        </textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" ng-click="updateOrSaveMachineDetail()">SAVE</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">CLOSE</button>
+                    </div>
+                </div>
+            </div>
+      </div>
+    </div>
+</div>

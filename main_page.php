@@ -13,8 +13,7 @@ Programmer: Alejandro Aguayo Acosta
     <head>
         
         
-        <title>Farmacia</title>
-        <link rel="icon" href="images/util/logo.png">
+        <title>PROYECTO</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -44,11 +43,14 @@ Programmer: Alejandro Aguayo Acosta
             ng-init="
                 user='<?php echo $_SESSION["user"]; ?>';
                 token='<?php echo $_SESSION["token"]; ?>';
+                initFunction( '<?php echo $_SESSION["user"]; ?>' , '<?php echo $_SESSION["token"]; ?>' );
             ">
             
             <!-- Header -->
             <div ng-include="'html/util/header.html'"></div>
-            <h1 title="{{ token }}"><span style="color: blue;">{{ user | uppercase }}</span></h1>
+            <h1>BIENVENIDO <span style="color: blue;">{{ user | uppercase }}</span></h1>
+            
+            <h2 style="color: white; background-color: darkblue; text-align: center;">SISTEMA</h2>
             
         </div>
     </body>
