@@ -24,4 +24,12 @@ class Security {
         }
         return $return;
     }
+    
+    //get ROL by USER
+    static function getRolByUser( $link , $user ){
+        $query = "SELECT rol FROM user WHERE user='$user'";
+        $result = mysqli_query( $link , $query );
+        $row = mysqli_fetch_row( $result );
+        return $row[0];
+    }
 }
