@@ -41,6 +41,8 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
         "idDeudor" : "",
         "monto" : "",
         "fecha" : "",
+        "rfcAsociado" : "",
+        "rfcDeudor" : ""
     };
     
     //catalogs
@@ -88,6 +90,8 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
             }
             for( var index in response.data ){
                 $scope.buroDeCreditoCatalog[ index ] = response.data[ index ] ;
+                
+                //extra data
                 $scope.buroDeCreditoCatalog[ index ].disable = true ;
             }
             
@@ -109,11 +113,13 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
     $scope.selectAsociadoDeudor = function( param , isAsociado ){
         if( isAsociado ){
             $scope.details.idAsociado = param.id;
+            $scope.details.rfcAsociado = param.rfc;
             $scope.filterAsociadoRFC = param.rfc;
             $scope.isAsociadoFilterDisabled = true;
             if( $scope.isDeudorFilterDisabled ){ $scope.checkIfSelectedAsociadoDeudorExist(); }
         }else{
             $scope.details.idDeudor = param.id;
+            $scope.details.rfcDeudor = param.rfc;
             $scope.filterDeudorRFC = param.rfc;
             $scope.isDeudorFilterDisabled = true;
             if( $scope.isAsociadoFilterDisabled ){ $scope.checkIfSelectedAsociadoDeudorExist(); }
@@ -127,6 +133,8 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
         $scope.details.idDeudor = param.idDeudor;
         $scope.details.monto = param.monto;
         $scope.details.fecha = param.fecha;
+        $scope.details.rfcAsociado = param.rfcAsociado;
+        $scope.details.rfcDeudor = param.rfcDeudor;
         
     };
     
@@ -145,6 +153,16 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
         }
         
     }
+    
+    //
+    $scope.updateRow = function( param ){
+        $scope.details.id = param.id;
+        $scope.details.idAsociado = param.idAsociado;
+        $scope.details.idDeudor = param.idDeudor;
+        $scope.details.monto = param.monto;
+        $scope.details.fecha = param.fecha;
+        $scope.updateOrSave();
+    };
     
     //POST
     $scope.updateOrSave = function(){
@@ -189,6 +207,9 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
                     idDeudor : $scope.details.idDeudor,
                     monto : $scope.details.monto,
                     fecha : $scope.details.fecha,
+                    rfcAsociado : $scope.details.rfcAsociado,
+                    rfcDeudor : $scope.details.rfcDeudor,
+                    
                     disable : true
                 }
             );
@@ -200,6 +221,10 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
                     $scope.buroDeCreditoCatalog[ index ].idDeudor = $scope.details.idDeudor;
                     $scope.buroDeCreditoCatalog[ index ].monto = $scope.details.monto;
                     $scope.buroDeCreditoCatalog[ index ].fecha = $scope.details.fecha;
+                    $scope.buroDeCreditoCatalog[ index ].rfcAsociado = $scope.details.rfcAsociado;
+                    $scope.buroDeCreditoCatalog[ index ].rfcDeudor = $scope.details.rfcDeudor;
+                    
+                    //extra data
                     $scope.buroDeCreditoCatalog[ index ].disable = true;
                 }
             }
@@ -216,6 +241,9 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
                             idDeudor : temporalTable[ index ].idDeudor,
                             monto : temporalTable[ index ].monto,
                             fecha : temporalTable[ index ].fecha,
+                            rfcAsociado : temporalTable[ index ].rfcAsociado,
+                            rfcDeudor : temporalTable[ index ].rfcDeudor,
+                            
                             disable : true
                         }
                     );
@@ -230,7 +258,32 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
         //
         $scope.showCrearNuevoRegistro = false;
         $scope.showListadoBuroDeCredito = true;
+        $scope.filterAsociadoRFC = "";
+        $scope.filterDeudorRFC = "";
     };
+    
+    //get RFC by id
+    $scope.getRfcById = function( isAsociado , id ){
+        var returnData = "";
+        if( isAsociado ){
+            for( var index in $scope.asociadoCatalog ){
+                if( $scope.asociadoCatalog[ index ].id == id ){
+                    returnData = $scope.asociadoCatalog[ index ].rfc;
+                    break;
+                }
+            }
+        }else{
+            console.log( "es deudor" );
+            for( var index in $scope.deudorCatalog ){
+                if( $scope.deudorCatalog[ index ].id == id ){
+                    returnData = $scope.deudorCatalog[ index ].rfc;
+                    break;
+                }
+            }
+        }
+        console.log( returnData );
+        return returnData;
+    }
     
     //
     $scope.cleanDetails = function( isReturnToBuroDeCredito ){

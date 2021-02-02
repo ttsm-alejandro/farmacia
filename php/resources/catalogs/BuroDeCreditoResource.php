@@ -101,7 +101,9 @@ function returnDataPOST( $link ){
             $datos["idAsociado"],
             $datos["idDeudor"],
             $datos["monto"],
-            $datos["fecha"]
+            $datos["fecha"],
+            "",
+            ""
             );
     $returnInfo = BuroDeCreditoService::save( $link , $newElement );
     echo $returnInfo;

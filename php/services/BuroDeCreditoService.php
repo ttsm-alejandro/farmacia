@@ -22,7 +22,9 @@ class BuroDeCreditoService {
                     . " id_asociado, "
                     . " id_deudor, "
                     . " monto, "
-                    . " fecha "
+                    . " fecha,"
+                    . " (SELECT rfc FROM asociado WHERE id=id_asociado) as rfc_asociado, "
+                    . " (SELECT rfc FROM deudor WHERE id=id_deudor) as rfc_deudor "
                 . "FROM"
                     . " buro_de_credito "
                 . "ORDER BY "
@@ -107,7 +109,9 @@ class BuroDeCreditoService {
                 $row[1],
                 $row[2],
                 $row[3],
-                $row[4]
+                $row[4],
+                $row[5],
+                $row[6]
                 );
         return $newRow;
         

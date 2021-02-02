@@ -66,7 +66,6 @@ Programmer: Alejandro Aguayo Acosta
             <div ng-show="showCrearNuevoRegistro">
                 <!-- CONTENIDO DE LA PAGINA, MOSTRAR SI NO SE ESTA ESPERANDO RESPUESTA DEL SERVIDOR -->
                 <div class="row" ng-show="!isWaitingServerResponse">
-                    {{ buroDeCreditoCatalog | json }}
                     <!-- LISTA DE ASOCIADOS -->
                     <h3>Seleccione un Asociados</h3>
 
@@ -97,6 +96,12 @@ Programmer: Alejandro Aguayo Acosta
                                 <td>{{ row.rfc }}</td>
                                 <td>{{ row.nombreContacto }}</td>
                                 <td>{{ row.telefono }}</td>
+                            </tr>
+                            <tr ng-show="!isAsociadoFilterDisabled">
+                                <td colspan="4" style="text-align: center; background-color: darkseagreen" ng-click="openCatalogWindow( 'asociado' )">Agregar nuevo Asociado</td>
+                            </tr>
+                            <tr ng-show="!isAsociadoFilterDisabled">
+                                <td colspan="4" style="text-align: center; background-color: darkslateblue; color: white" ng-click="getCatalogDataByTable( 'Asociado' )">Recargar Catologo de Asociados</td>
                             </tr>
                         </table>
                     </div>
@@ -136,16 +141,39 @@ Programmer: Alejandro Aguayo Acosta
                             <tr ng-show="!isDeudorFilterDisabled">
                                 <td colspan="4" style="text-align: center; background-color: darkseagreen" ng-click="openCatalogWindow( 'deudor' )">Agregar nuevo Cliente Deudor</td>
                             </tr>
+                            <tr ng-show="!isDeudorFilterDisabled">
+                                <td colspan="4" style="text-align: center; background-color: darkslateblue; color: white" ng-click="getCatalogDataByTable( 'Deudor' )">Recargar Catologo de Deudores</td>
+                            </tr>
                         </table>
                     </div>
                 
-                    <!-- -->
+                    <!-- MONTO -->
                     <div class="row" ng-show="isDeudorFilterDisabled && isAsociadoFilterDisabled">
                         <h3>Monto adeudado</h3>
                         <input ng-model="details.monto">
-                        <div class="btn btn-success" ng-click="updateOrSave()">Guardar</div>
+                        <div class="btn btn-danger" ng-click="
+                            filterAsociadoRFC='';
+                            filterDeudorRFC='';
+                            isAsociadoFilterDisabled = false;
+                            isDeudorFilterDisabled = false;
+                            showCrearNuevoRegistro = false; 
+                            showListadoBuroDeCredito = true;">Cancelar</div>
+                        <div class="btn btn-success" ng-click="
+                            isAsociadoFilterDisabled = false;
+                            isDeudorFilterDisabled = false;
+                            updateOrSave();">Guardar</div>
                     </div>
-                
+                    
+                    <div class="row" ng-show="!(isDeudorFilterDisabled && isAsociadoFilterDisabled)">
+                        <div class="btn btn-danger" ng-click="
+                            filterAsociadoRFC='';
+                            filterDeudorRFC='';
+                            isAsociadoFilterDisabled = false;
+                            isDeudorFilterDisabled = false;
+                            showCrearNuevoRegistro = false;
+                            showListadoBuroDeCredito = true;">Cancelar</div>
+                    </div>
+                    
                 </div>
             </div>
                 
@@ -153,21 +181,20 @@ Programmer: Alejandro Aguayo Acosta
             <!-- TABLA BURO DE CREDITO - LISTA FILTRADA -->
             <div  ng-show="showListadoBuroDeCredito">
                 <!-- FILTROS ASOCIADO -->
-                <!--div class="input-group">
-                    <span class="input-group-addon">Filtrar Asociado por RFC</span>
+                <div class="input-group">
+                    <span class="input-group-addon">Filtrar por RFC de Asociado</span>
                     <input class="form-control" ng-model="filterAsociadoRFC" title="Filtar lista por RFC">
                     <span ng-click="filterAsociadoRFC = '';" class="input-group-addon" title="Clic para quitar filtros"><i class="glyphicon glyphicon-repeat"></i></span>
-                </div-->
+                </div>
                 
                 <!-- FILTROS DEUDOR -->
-                <!--div class="input-group">
-                    <span class="input-group-addon">Filtrar Deudor por RFC</span>
+                <div class="input-group">
+                    <span class="input-group-addon">Filtrar por RFC de Deudor</span>
                     <input class="form-control" ng-model="filterDeudorRFC" title="Filtar lista por RFC">
                     <span ng-click="filterDeudorRFC = '';" class="input-group-addon" title="Clic para quitar filtros"><i class="glyphicon glyphicon-repeat"></i></span>
-                </div-->
+                </div>
                 
                 <!-- TABLA BURO DE CREDITO - LISTA FILTRADA -->
-                {{ details | json }}
                 <div style="overflow: scroll; max-height: {{ userScreenHeight }};">
                     <!-- TABLA -->
                     <table class="table table-hover table-condensed">
@@ -179,27 +206,31 @@ Programmer: Alejandro Aguayo Acosta
                             <th>Fecha</th>
                             <th>Accion</th>
                         </tr>
-                        <tr ng-repeat="row in buroDeCreditoCatalog" 
+                        <tr ng-repeat="row in buroDeCreditoCatalog | filter : { rfcAsociado : filterAsociadoRFC , rfcDeudor : filterDeudorRFC }" 
                             ng-click="selectBuroDeCredito( row )"
                             style="{{ isRowSelected(row , false , true) }}"
                             title="Direccion: {{ row.direccion }}"
                             >
                             <td>{{ $index + 1 }}</td>
                             <td>
-                                <select ng-model="row.idAsociado" ng-options=" x.id as x.rfc for x in asociadoCatalog" ng-disabled="true" class="form-control"></select>
+                                <!--input ng-model="row.idAsociado" ng-disabled="true" class="form-control"-->
+                                <input ng-model="row.rfcAsociado" ng-disabled="true" class="form-control">
+                                <!--select ng-model="row.idAsociado" ng-options=" x.id as x.rfc for x in asociadoCatalog" ng-disabled="true" class="form-control"></select-->
                             </td>
                             <td>
-                                <select ng-model="row.idDeudor" ng-options=" x.id as x.rfc for x in deudorCatalog" ng-disabled="true" class="form-control"></select>
+                                <!--input ng-model="row.idDeudor" ng-disabled="true" class="form-control"-->
+                                <input ng-model="row.rfcDeudor" ng-disabled="true" class="form-control">
+                                <!--select ng-model="row.idDeudor" ng-options=" x.id as x.rfc for x in deudorCatalog" ng-disabled="true" class="form-control"></select-->
                             </td>
                             <td><input ng-model="row.monto" ng-disabled="row.disable" ng-change="details.monto = row.monto"></td>
                             <td>{{ row.fecha }}</td>
                             <td>
-                                <div ng-show="!row.disable" class="btn btn-success btn-sm" ng-click="updateOrSave();">Guardar</div>
+                                <div ng-show="!row.disable" class="btn btn-success btn-sm" ng-click="updateRow( row );">Guardar</div>
                                 <div ng-show="row.disable" class="btn btn-primary btn-sm" ng-click="row.disable = false;">Editar</div>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="5" style="text-align: center; background-color: darkseagreen" 
+                            <td colspan="6" style="text-align: center; background-color: darkseagreen" 
                                 ng-click="showCrearNuevoRegistro=true;
                                     showListadoBuroDeCredito=false;
                                     details.id='--';
@@ -207,12 +238,15 @@ Programmer: Alejandro Aguayo Acosta
                                     details.idDeudor='';
                                     details.monto='';
                                     details.fecha='';
+                                    details.rfcAsociado='';
+                                    details.rfcDeudor='';
                                     filterAsociadoRFC='';
                                     filterDeudorRFC=''
                                 ">Agregar nuevo Registro</td>
                         </tr>
                     </table>
                 </div>
+                
             </div>
         </div>
     </body>
