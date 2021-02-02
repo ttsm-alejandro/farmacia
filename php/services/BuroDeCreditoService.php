@@ -67,7 +67,7 @@ class BuroDeCreditoService {
                     . " VALUES("
                         . "$newElement->idAsociado,"
                         . "$newElement->idDeudor,"
-                        . "$newElement->monto,"
+                        . "'$newElement->monto',"
                         . "'$newElement->fecha'"
                     . ")";
         }else{
@@ -77,7 +77,7 @@ class BuroDeCreditoService {
                     . " SET "
                         . " id_asociado=$newElement->idAsociado, "
                         . " id_deudor=$newElement->idDeudor, "
-                        . " monto=$newElement->monto, "
+                        . " monto='$newElement->monto', "
                         . " fecha='$newElement->fecha' "
                     . " WHERE "
                         . "id=$newElement->id";

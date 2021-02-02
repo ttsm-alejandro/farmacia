@@ -226,6 +226,7 @@ Programmer: Alejandro Aguayo Acosta
                             <td>{{ row.fecha }}</td>
                             <td>
                                 <div ng-show="!row.disable" class="btn btn-success btn-sm" ng-click="updateRow( row );">Guardar</div>
+                                <div ng-show="!row.disable" class="btn btn-danger btn-sm" ng-click="deleteRow( row );"><span class="glyphicon glyphicon-trash"></span></div>
                                 <div ng-show="row.disable" class="btn btn-primary btn-sm" ng-click="row.disable = false;">Editar</div>
                             </td>
                         </tr>

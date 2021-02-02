@@ -42,7 +42,8 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
         "monto" : "",
         "fecha" : "",
         "rfcAsociado" : "",
-        "rfcDeudor" : ""
+        "rfcDeudor" : "",
+        "disable" : true
     };
     
     //catalogs
@@ -244,7 +245,7 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
                             rfcAsociado : temporalTable[ index ].rfcAsociado,
                             rfcDeudor : temporalTable[ index ].rfcDeudor,
                             
-                            disable : true
+                            disable : temporalTable[ index ].disable
                         }
                     );
                 }
@@ -293,7 +294,14 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
     }
     
     //DELETE
-    $scope.deleteRow = function(){
+    $scope.deleteRow = function( param ){
+        
+        $scope.details.id = param.id;
+        $scope.details.idAsociado = param.idAsociado;
+        $scope.details.idDeudor = param.idDeudor;
+        $scope.details.monto = param.monto;
+        $scope.details.fecha = param.fecha;
+        
         if( $scope.details.id == "--" ){
             swal( { text :  "Select System" , icon : "error" } );
         }else{
