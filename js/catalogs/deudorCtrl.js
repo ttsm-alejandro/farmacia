@@ -139,7 +139,7 @@ miApp.controller( 'deudorCtrl'  ,['$scope' , '$http' , '$window' , function( $sc
     };
     
     //POST
-    $scope.updateOrSaveRow = function(){
+    $scope.updateOrSaveRow = function( isAndNew ){
         if( $scope.isDetailsDataOk() ){
             
             //waiting screen
@@ -157,6 +157,9 @@ miApp.controller( 'deudorCtrl'  ,['$scope' , '$http' , '$window' , function( $sc
                     swal( { text: "INSERT DONE", icon: "success" } );
                 }else{
                     swal( { text: "UPDATE DONE", icon: "success" } );
+                }
+                if( isAndNew ){
+                    $scope.cleanDetails();
                 }
             }, 
             function(response) { // optional
@@ -278,46 +281,6 @@ miApp.controller( 'deudorCtrl'  ,['$scope' , '$http' , '$window' , function( $sc
         $scope.details.telefono = "";
     };
 
-    /*
-    //    
-    $scope.getCatalogData = function(){
-        $scope.getCatalogDataByTable( "Company" );
-        $scope.getCatalogDataByTable( "Plant" );
-        $scope.getCatalogDataByTable( "Department" );
-    };
-    
-    //
-    $scope.getCatalogDataByTable = function( tableName ){
-        var tableServiceUrl = serviceUrl + "php/resources/catalogs/" + tableName + "Resource.php";
-        
-        //clean previuos data
-        if( tableName == "Company" ){ $scope.companyCatalog = []; }
-        if( tableName == "Plant" ){ $scope.plantCatalog = []; }
-        if( tableName == "Department" ){ $scope.departmentCatalog = []; }
-        
-        $('#myLoadingModal').modal('show'); 
-        $http({
-            url: tableServiceUrl + "?user=" + $scope.user + "&token=" + $scope.token,
-            method: "GET"
-        })
-        .then(function(response) {
-            if(response.data == "ACCESS DENIED" ){
-                swal( { icon : error , text : "NO ACCESS" } );
-            }
-            for( var index in response.data ){
-                if( tableName == "Company" ){ $scope.companyCatalog[ index ] = response.data[ index ]; }
-                if( tableName == "Plant" ){ $scope.plantCatalog[ index ] = response.data[ index ]; }
-                if( tableName == "Department" ){ $scope.departmentCatalog[ index ] = response.data[ index ]; }
-            }
-            $('#myLoadingModal').modal('hide'); 
-        }, 
-        function(response) { // optional
-            swal( { icon : error , text : "ERROR" } );
-            $('#myLoadingModal').modal('hide'); 
-        });
-    };
-    */
-    
     //
     $scope.isDetailsDataOk = function(){
         var returnData = true;

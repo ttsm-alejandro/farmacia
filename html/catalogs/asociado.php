@@ -122,7 +122,8 @@ Programmer: Alejandro Aguayo Acosta
                         <tr><th>Nombre del Contacto:</th><td><input ng-model="details.nombreContacto" class="form-control"></td></tr>
                         <tr><th>Telefono:</th><td><input ng-model="details.telefono" class="form-control"></td></tr>
                     </table>
-                    <button class="btn btn-info" ng-click="updateOrSaveRow()" >Save</button>
+                    <button class="btn btn-success" ng-click="updateOrSaveRow( true )" >Save and New</button>
+                    <button class="btn btn-info" ng-click="updateOrSaveRow( false )" >Save</button>
                     
                     <!-- *C Begin: PHP line for block elements when "?id=" is present in the URL -->
                     <?php if( !isset( $_GET[ "id" ] ) ){ ?>

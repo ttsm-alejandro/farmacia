@@ -113,7 +113,7 @@ Programmer: Alejandro Aguayo Acosta
                 <?php } ?>
                  
                 <div class="col-lg-9">
-                    <h4>DETALLES</h4>
+                    <h4>DETALLES DEL CLIENTE / DEUDOR</h4>
                     <table class="table table-striped">
                         <tr><th>ID:</th><td>{{ details.id }}</td></tr>
                         <tr><th>Razon Social:</th><td><input ng-model="details.razonSocial" class="form-control"></td></tr>
@@ -122,7 +122,8 @@ Programmer: Alejandro Aguayo Acosta
                         <tr><th>Nombre del Contacto:</th><td><input ng-model="details.nombreContacto" class="form-control"></td></tr>
                         <tr><th>Telefono:</th><td><input ng-model="details.telefono" class="form-control"></td></tr>
                     </table>
-                    <button class="btn btn-info" ng-click="updateOrSaveRow()" >Save</button>
+                    <button class="btn btn-success" ng-click="updateOrSaveRow( true )" >Save and New</button>
+                    <button class="btn btn-info" ng-click="updateOrSaveRow( false )" >Save</button>
                     
                     <!-- *C Begin: PHP line for block elements when "?id=" is present in the URL -->
                     <?php if( !isset( $_GET[ "id" ] ) ){ ?>

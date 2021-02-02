@@ -4,10 +4,10 @@
  */
 
 var miApp = angular.module( "miApp" , [] );
-miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $scope , $http , $window ){
+miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , function( $scope , $http , $window ){
     /**** variables ****/
     //URL
-    var asociadoResourceUrl = serviceUrl + "php/resources/catalogs/AsociadoResource.php";
+    var buroDeCreditoResourceUrl = serviceUrl + "php/resources/catalogs/BuroDeCreditoResource.php";
     $scope.relativeUrl = "../../";
     
     //oficial colors
@@ -20,9 +20,13 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
     
     //user screen
     $scope.userScreenHeight = "";
+    $scope.halfUserScreenHeight = "";
     
     //flags
     $scope.isWaitingServerResponse = false;
+    $scope.showCrearNuevoRegistro = false;
+    $scope.showListadoBuroDeCredito = true;
+    
     
     //Message texts
     $scope.deleteWarningTitle = "¿Esta seguro?";
@@ -33,22 +37,23 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
     //forms
     $scope.details = {
         "id" : "--",
-        "razonSocial" : "",
-        "rfc" : "",
-        "direccion" : "",
-        "nombreContacto" : "",
-        "telefono" : ""
+        "idAsociado" : "",
+        "idDeudor" : "",
+        "monto" : "",
+        "fecha" : "",
     };
     
     //catalogs
-    /*$scope.companyCatalog = [];
-    $scope.plantCatalog = [];
-    $scope.departmentCatalog = [];
-    */
+    $scope.asociadoCatalog = [];
+    $scope.deudorCatalog = [];
 
     //table
     $scope.filterAsociadoRFC = "";
-    $scope.tableContent = [];
+    $scope.filterDeudorRFC = "";
+    $scope.isAsociadoFilterDisabled = false;
+    $scope.isDeudorFilterDisabled = false;
+    
+    $scope.buroDeCreditoCatalog = [];
     
     /**** functions ****/
     //
@@ -56,20 +61,25 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
         //screen resolution
         $scope.userScreenHeight = $(document).height();
         $scope.userScreenHeight = $scope.userScreenHeight - 275;
+        //half 
+        $scope.halfUserScreenHeight = $scope.userScreenHeight / 2;
+        $scope.halfUserScreenHeight = $scope.halfUserScreenHeight - 100;
+        //
         $scope.userScreenHeight = $scope.userScreenHeight + "px";
+        $scope.halfUserScreenHeight = $scope.halfUserScreenHeight + "px";
     };
         
     //
     $scope.getData = function(){
         $scope.getUserScreenHeight();
-        $scope.tableContent = [];
+        $scope.buroDeCreditoCatalog = [];
         
         ////waiting screen
         $('#myLoadingModal').modal('show'); 
         $scope.isWaitingServerResponse = true;
         
         $http({
-            url: asociadoResourceUrl + "?user=" + $scope.user + "&token=" + $scope.token,
+            url: buroDeCreditoResourceUrl + "?user=" + $scope.user + "&token=" + $scope.token,
             method: "GET"
         })
         .then(function(response) {
@@ -77,7 +87,8 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
                 swal( { icon : error , text : "ACCESS DENIED" } );
             }
             for( var index in response.data ){
-                $scope.tableContent[ index ] = response.data[ index ] ;
+                $scope.buroDeCreditoCatalog[ index ] = response.data[ index ] ;
+                $scope.buroDeCreditoCatalog[ index ].disable = true ;
             }
             
             //waiting screen
@@ -94,52 +105,49 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
         });
     };
     
+    //clic on a ROW
+    $scope.selectAsociadoDeudor = function( param , isAsociado ){
+        if( isAsociado ){
+            $scope.details.idAsociado = param.id;
+            $scope.filterAsociadoRFC = param.rfc;
+            $scope.isAsociadoFilterDisabled = true;
+            if( $scope.isDeudorFilterDisabled ){ $scope.checkIfSelectedAsociadoDeudorExist(); }
+        }else{
+            $scope.details.idDeudor = param.id;
+            $scope.filterDeudorRFC = param.rfc;
+            $scope.isDeudorFilterDisabled = true;
+            if( $scope.isAsociadoFilterDisabled ){ $scope.checkIfSelectedAsociadoDeudorExist(); }
+        }
+    };
+    
     //
-    $scope.getDataById = function( id ){
-        //waiting screen
-        $('#myLoadingModal').modal('show'); 
-        $scope.isWaitingServerResponse = true;
-        
-        $http({
-            url: asociadoResourceUrl + "?user=" + $scope.user + "&token=" + $scope.token + "&id=" + id,
-            method: "GET"
-        })
-        .then(function(response) {
-            if(response.data == "ACCESS DENIED" ){
-                swal( { icon : error , text : "ACCESS DENIED" } );
-            }else{
-                $scope.getDetails( response.data );
-            }
-            //waiting screen
-            $('#myLoadingModal').modal('hide'); 
-            $scope.isWaitingServerResponse = false;
-        }, 
-        function(response) { // optional
-            swal( { icon : error , text : "ERROR" } );
-            
-            //waiting screen
-            $('#myLoadingModal').modal('hide'); 
-            $scope.isWaitingServerResponse = false;
-        });
-    };
-    
-    //clic on a ROW of the table
-    $scope.getDetails = function( param ){
+    $scope.selectBuroDeCredito = function( param ){
         $scope.details.id = param.id;
-        $scope.details.razonSocial = param.razonSocial;
-        $scope.details.rfc = param.rfc;
-        $scope.details.direccion = param.direccion;
-        $scope.details.nombreContacto = param.nombreContacto;
-        $scope.details.telefono = param.telefono;
+        $scope.details.idAsociado = param.idAsociado;
+        $scope.details.idDeudor = param.idDeudor;
+        $scope.details.monto = param.monto;
+        $scope.details.fecha = param.fecha;
+        
     };
     
-    //new row
-    $scope.newRow = function(){
-        $scope.cleanDetails();
-    };
+    //
+    $scope.checkIfSelectedAsociadoDeudorExist = function(){
+        console.log( "si la relacion ya existe, poner id/monto/fecha" );
+        
+        for(var index in $scope.buroDeCreditoCatalog ){
+            if( ( $scope.buroDeCreditoCatalog[ index ].idAsociado === $scope.details.idAsociado )
+                    && ( $scope.buroDeCreditoCatalog[ index ].idDeudor === $scope.details.idDeudor )
+                    ){
+                $scope.details.id = $scope.buroDeCreditoCatalog[ index ].id;
+                $scope.details.monto = $scope.buroDeCreditoCatalog[ index ].monto;
+                $scope.details.fecha = $scope.buroDeCreditoCatalog[ index ].fecha;
+            }
+        }
+        
+    }
     
     //POST
-    $scope.updateOrSaveRow = function( isAndNew ){
+    $scope.updateOrSave = function(){
         if( $scope.isDetailsDataOk() ){
             
             //waiting screen
@@ -147,7 +155,7 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
             $scope.isWaitingServerResponse = true;
             
             $http({
-                url: asociadoResourceUrl + "?user=" + $scope.user + "&token=" + $scope.token,
+                url: buroDeCreditoResourceUrl + "?user=" + $scope.user + "&token=" + $scope.token,
                 method: "POST",
                 data: $scope.details
             })
@@ -157,9 +165,6 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
                     swal( { text: "INSERT DONE", icon: "success" } );
                 }else{
                     swal( { text: "UPDATE DONE", icon: "success" } );
-                }
-                if( isAndNew ){
-                    $scope.cleanDetails();
                 }
             }, 
             function(response) { // optional
@@ -177,41 +182,41 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
         var id = responseData.split( " " )[1];
         if( responseData.includes( "INSERT" ) ){
             $scope.details.id = id;
-            $scope.tableContent.push(
+            $scope.buroDeCreditoCatalog.push(
                 {
                     id : id,
-                    razonSocial : $scope.details.razonSocial,
-                    rfc : $scope.details.rfc,
-                    direccion : $scope.details.direccion,
-                    nombreContacto : $scope.details.nombreContacto,
-                    telefono : $scope.details.telefono
+                    idAsociado : $scope.details.idAsociado,
+                    idDeudor : $scope.details.idDeudor,
+                    monto : $scope.details.monto,
+                    fecha : $scope.details.fecha,
+                    disable : true
                 }
             );
         }
         if( responseData.includes( "UPDATE" ) ){
-            for( var index in $scope.tableContent ){
-                if( $scope.tableContent[ index ].id == id ){
-                    $scope.tableContent[ index ].razonSocial = $scope.details.razonSocial;
-                    $scope.tableContent[ index ].rfc = $scope.details.rfc;
-                    $scope.tableContent[ index ].direccion = $scope.details.direccion;
-                    $scope.tableContent[ index ].nombreContacto = $scope.details.nombreContacto;
-                    $scope.tableContent[ index ].telefono = $scope.details.telefono;
+            for( var index in $scope.buroDeCreditoCatalog ){
+                if( $scope.buroDeCreditoCatalog[ index ].id == id ){
+                    $scope.buroDeCreditoCatalog[ index ].idAsociado = $scope.details.idAsociado;
+                    $scope.buroDeCreditoCatalog[ index ].idDeudor = $scope.details.idDeudor;
+                    $scope.buroDeCreditoCatalog[ index ].monto = $scope.details.monto;
+                    $scope.buroDeCreditoCatalog[ index ].fecha = $scope.details.fecha;
+                    $scope.buroDeCreditoCatalog[ index ].disable = true;
                 }
             }
         }
         if( responseData.includes( "DELETE" ) ){
-            var temporalTable = $scope.tableContent;
-            $scope.tableContent = [];
+            var temporalTable = $scope.buroDeCreditoCatalog;
+            $scope.buroDeCreditoCatalog = [];
             for( var index in temporalTable ){
                 if( temporalTable[ index ].id !== id ){
-                    $scope.tableContent.push(
+                    $scope.buroDeCreditoCatalog.push(
                         {
                             id : temporalTable[ index ].id,
-                            razonSocial : temporalTable[ index ].razonSocial,
-                            rfc : temporalTable[ index ].rfc,
-                            direccion : temporalTable[ index ].direccion,
-                            nombreContacto : temporalTable[ index ].nombreContacto,
-                            telefono : temporalTable[ index ].telefono
+                            idAsociado : temporalTable[ index ].idAsociado,
+                            idDeudor : temporalTable[ index ].idDeudor,
+                            monto : temporalTable[ index ].monto,
+                            fecha : temporalTable[ index ].fecha,
+                            disable : true
                         }
                     );
                 }
@@ -221,7 +226,18 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
         //waiting screen
         $('#myLoadingModal').modal('hide'); 
         $scope.isWaitingServerResponse = false;
+        
+        //
+        $scope.showCrearNuevoRegistro = false;
+        $scope.showListadoBuroDeCredito = true;
     };
+    
+    //
+    $scope.cleanDetails = function( isReturnToBuroDeCredito ){
+        if( isReturnToBuroDeCredito ){
+            
+        }
+    }
     
     //DELETE
     $scope.deleteRow = function(){
@@ -254,7 +270,7 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
         $scope.isWaitingServerResponse = true;
         
         $http({
-            url: asociadoResourceUrl + "?user=" + $scope.user + "&token=" + $scope.token + "&id=" + $scope.details.id + "&delete=ok",
+            url: buroDeCreditoResourceUrl + "?user=" + $scope.user + "&token=" + $scope.token + "&id=" + $scope.details.id + "&delete=ok",
             method: "DELETE"
         })
         .then(function(response) {
@@ -272,21 +288,23 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
     };
     
     //Limpia los detalles
-    $scope.cleanDetails = function(){
+    $scope.releaseSelectedAsociadoDeudor = function( isAsociado ){
+        if( isAsociado ){
+            $scope.details.idAsociado = "";
+            $scope.isAsociadoFilterDisabled = false;
+        }else{
+            $scope.details.idDeudor = "";
+            $scope.isDeudorFilterDisabled = false;
+        }
         $scope.details.id = "--";
-        $scope.details.razonSocial = "";
-        $scope.details.rfc = "";
-        $scope.details.direccion = "";
-        $scope.details.nombreContacto = "";
-        $scope.details.telefono = "";
+        $scope.details.monto = "";
+        $scope.details.fecha = "";
     };
 
-    /*
     //    
     $scope.getCatalogData = function(){
-        $scope.getCatalogDataByTable( "Company" );
-        $scope.getCatalogDataByTable( "Plant" );
-        $scope.getCatalogDataByTable( "Department" );
+        $scope.getCatalogDataByTable( "Asociado" );
+        $scope.getCatalogDataByTable( "Deudor" );
     };
     
     //
@@ -294,11 +312,12 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
         var tableServiceUrl = serviceUrl + "php/resources/catalogs/" + tableName + "Resource.php";
         
         //clean previuos data
-        if( tableName == "Company" ){ $scope.companyCatalog = []; }
-        if( tableName == "Plant" ){ $scope.plantCatalog = []; }
-        if( tableName == "Department" ){ $scope.departmentCatalog = []; }
+        if( tableName == "Asociado" ){ $scope.asociadoCatalog = []; }
+        if( tableName == "Deudor" ){ $scope.deudorCatalog = []; }
         
-        $('#myLoadingModal').modal('show'); 
+        $('#myLoadingModal').modal('show');
+        $scope.isWaitingServerResponse = true;
+        
         $http({
             url: tableServiceUrl + "?user=" + $scope.user + "&token=" + $scope.token,
             method: "GET"
@@ -308,53 +327,30 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
                 swal( { icon : error , text : "NO ACCESS" } );
             }
             for( var index in response.data ){
-                if( tableName == "Company" ){ $scope.companyCatalog[ index ] = response.data[ index ]; }
-                if( tableName == "Plant" ){ $scope.plantCatalog[ index ] = response.data[ index ]; }
-                if( tableName == "Department" ){ $scope.departmentCatalog[ index ] = response.data[ index ]; }
+                if( tableName == "Asociado" ){ $scope.asociadoCatalog[ index ] = response.data[ index ]; }
+                if( tableName == "Deudor" ){ $scope.deudorCatalog[ index ] = response.data[ index ]; }
             }
             $('#myLoadingModal').modal('hide'); 
+            $scope.isWaitingServerResponse = false;
         }, 
         function(response) { // optional
             swal( { icon : error , text : "ERROR" } );
             $('#myLoadingModal').modal('hide'); 
+            $scope.isWaitingServerResponse = false;
         });
     };
-    */
     
     //
     $scope.isDetailsDataOk = function(){
         var returnData = true;
         var errorText = "";
         
-        $scope.details.rfc = $scope.details.rfc.toUpperCase();
-        
-        if( $scope.details.razonSocial === "" ){ returnData = false; errorText += "Debe escribir una RAZON SOCIAL, "; }
-        if( $scope.details.rfc === "" ){ returnData = false; errorText += "Escriba el RFC, "; }
-        if( $scope.details.direccion === "" ){ returnData = false; errorText += "Escriba la DIRECCION, "; }
-        if( $scope.details.nombreContacto === "" ){ returnData = false; errorText += "Escriba el NOMBRE DEL CONTACTO, "; }
-        if( $scope.details.telefono === "" ){ returnData = false; errorText += "Escriba el TELEFONO, "; }
-        
-        if( !$scope.isDataCombinationOk() ){ returnData = false; errorText += "Ya existe un registro con el mismo RFC, "; }
-        
-        if( !$scope.isRFCMoralOk() ){ returnData = false; errorText += "El RFC no es valido, "; }
-        
-        
+        if( $scope.details.idAsociado === "" ){ returnData = false; errorText += "Seleccione un ASOCIADO, "; }
+        if( $scope.details.idDeudor === "" ){ returnData = false; errorText += "Seleccione un CLIENTE / DEUDOR, "; }
+        if( $scope.details.monto === "" ){ returnData = false; errorText += "Ingrese MONTO, "; }
         
         if( !returnData ){
             swal({"text":errorText,"icon":"error"});
-        }
-        return returnData;
-    };
-    
-    //No pueden existir 2 asociados con el mismo RFC
-    $scope.isDataCombinationOk = function(){
-        var returnData = true;
-        for( var index in $scope.tableContent ){
-            if( $scope.tableContent[ index ].id != $scope.details.id ){
-                if( $scope.tableContent[ index ].rfc == $scope.details.rfc ){
-                    returnData = false;
-                }
-            }
         }
         return returnData;
     };
@@ -411,11 +407,25 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
     
     
     //
-    $scope.isRowSelected = function( row ){
+    $scope.isRowSelected = function( row , isAsociado , isBuroDeCredito ){
         var style = "";
-        if( row.id === $scope.details.id ){
-            style = "background-color:" + $scope.oficialBlueColor + "; color: white;";
+        
+        if( isBuroDeCredito ){
+            if( row.id === $scope.details.id ){
+                style = "background-color:" + $scope.oficialBlueColor + "; ";
+            }
+        }else{
+            if( isAsociado ){
+                if( row.id === $scope.details.idAsociado ){
+                    style = "background-color:" + $scope.oficialBlueColor + "; color: white;";
+                }
+            }else{
+                if( row.id === $scope.details.idDeudor ){
+                    style = "background-color:" + $scope.oficialBlueColor + "; color: white;";
+                }
+            }
         }
+        
         return style;
     };
     
@@ -425,11 +435,7 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
     };
     
     //Open new TAB
-    $scope.openCatalogWindow = function( param , id ){
-        if( id == "" || id==null ){
-            swal({ text : "Select a option to EDIT" , icon : "error" });
-        }else{
-            $window.open( $scope.relativeUrl + "html/catalogs/" + param + ".php?id=" + id  , "" , "top=0,left=0,width=800,height=600" );
-        }
+    $scope.openCatalogWindow = function( param ){
+        $window.open( $scope.relativeUrl + "html/catalogs/" + param + ".php?id=--"  , "" , "top=0,left=0,width=800,height=600" );
     };
 }]);
