@@ -48,6 +48,26 @@ class UserService {
         return UserService::getElementByRow( $row );
     }
     
+    /*
+     *Regresa OK si 
+     *      user/password son correctos
+     *      actualiza password con el "newPassword" que viene en "rol"
+     *      
+     * Si user/password no coinciden, regresa NG
+     */
+    static function updatePassword( $link , $newElement ){
+        $responseData = "NG";
+        $query = "SELECT user,password FROM user WHERE user='$newElement->user'";
+        $row = mysqli_fetch_row ( mysqli_query( $link , $query ) );
+        
+        if( $row[1] == $newElement->password ){
+            $responseData = "OK";
+            $query = "UPDATE user SET password='$newElement->rol' WHERE user='$newElement->user'";
+            mysqli_query( $link , $query );
+        }
+        return $responseData;
+    }
+    
     //post new Element
     static function save( $link , $newElement ){
         $saveOrUpdate = "";

@@ -44,14 +44,13 @@ Programmer: Alejandro Aguayo Acosta
                  
                  user='<?php echo $_SESSION["user"]; ?>';
                  token='<?php echo $_SESSION["token"]; ?>';
+                 getData();
                  <?php 
                     if( isset( $_GET[ "id" ] ) ){
                         if( !($_GET["id"] == "--") ){
                             echo "getDataById(" . $_GET[ "id" ] .  ");";
                         }
-                    }else{
-                        echo "getData();";
-                    } 
+                    }
                  ?>
                                            ">
             <!-- *A Begin : PHP line for block elements when "?id=" is present in the URL -->
@@ -116,8 +115,8 @@ Programmer: Alejandro Aguayo Acosta
                     <h4>DETALLES DEL CLIENTE / DEUDOR</h4>
                     <table class="table table-striped">
                         <tr><th>ID:</th><td>{{ details.id }}</td></tr>
-                        <tr><th>Razon Social:</th><td><input ng-model="details.razonSocial" class="form-control"></td></tr>
                         <tr><th>RFC:</th><td><input ng-model="details.rfc" class="form-control"></td></tr>
+                        <tr><th>Razon Social:</th><td><input ng-model="details.razonSocial" class="form-control"></td></tr>
                         <tr><th>Direccion:</th><td><textarea ng-model="details.direccion" class="form-control"></textarea></td></tr>
                         <tr><th>Nombre del Contacto:</th><td><input ng-model="details.nombreContacto" class="form-control"></td></tr>
                         <tr><th>Telefono:</th><td><input ng-model="details.telefono" class="form-control"></td></tr>
@@ -136,7 +135,6 @@ Programmer: Alejandro Aguayo Acosta
                     <button class="btn btn-danger" ng-click="closeThisWindow()">Close</button>
                     <!-- *D Begin: PHP line for block elements when "?id=" is present in the URL -->
                     <?php } ?>
-                    
                 </div>
             </div>
         </div>

@@ -44,6 +44,7 @@ Programmer: Alejandro Aguayo Acosta
                  
                  user='<?php echo $_SESSION["user"]; ?>';
                  token='<?php echo $_SESSION["token"]; ?>';
+                 details.user = '<?php echo $_SESSION["user"]; ?>';
                                            ">
                 <!-- Header -->
                 <div ng-include="'../util/header.html'"></div>
@@ -67,15 +68,14 @@ Programmer: Alejandro Aguayo Acosta
                 <div class="col-lg-9">
                     <h4>DETALLES</h4>
                     <table class="table table-striped">
-                        <tr><th>Nombre de Usuario:</th><td><?php echo $_SESSION["user"]; ?></td></tr>
+                        <tr><th>Nombre de Usuario:</th><td><input ng-disabled="true" ng-model="details.user"></td></tr>
+                        <tr><td colspan="2"><h4>ACTUALIZAR CONTRASEÑA</h4></td></tr>
+                        <tr><th>Contraseña actual:</th><td><input type="password" ng-model="details.password"></td></tr>
+                        <tr><th>Nueva contraseña:</th><td><input type="password" ng-model="details.newPassword"></td></tr>
+                        <tr><th>Repetir nueva contraseña:</th><td><input type="password" ng-model="details.repeatNewPassword"></td></tr>
+                        <tr><td colspan="2" style="text-align: right"><button class="btn btn-info" ng-click="updatePassword()">GUARDAR</button></td></tr>
                     </table>
-                    <h4>ACTUALIZAR CONTRASEÑA</h4>
-                    <table class="table table-striped">
-                        <tr><th>Contraseña actual:</th><td><input type="password" ></td></tr>
-                        <tr><th>Nueva contraseña:</th><td><input type="password" ></td></tr>
-                        <tr><th>Repetir nueva contraseña:</th><td><input type="password" ></td></tr>
-                    </table>
-                    <button class="btn btn-info" ng-click="updateOrSave()" >GUARDAR</button>
+                    
                 </div>
             </div>
         </div>

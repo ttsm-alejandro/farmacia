@@ -101,21 +101,35 @@ function returnDataDELETE( $link , $rol ){
 
 //if all the security filters are pass
 function returnDataPOST( $link , $rol ){
-    //solo envia si es admin
-    if( $rol == "admin" ){
+    //
+    if( isset( $_GET[ "updatePassword" ])){
         //get the data in the json
         $datos = json_decode(file_get_contents('php://input'),true);
         $newElement = new UserModel(
-                $datos["id"],
+                "",
                 $datos["user"],
                 $datos["password"],
-                $datos["rol"]
+                $datos["newPassword"]
                 );
-        $returnInfo = UserService::save( $link , $newElement );
+        $returnInfo = UserService::updatePassword( $link , $newElement );
         echo $returnInfo;
-    }else{ 
-        returnError(); 
-    } 
+    }else{
+        //solo envia si es admin
+        if( $rol == "admin" ){
+            //get the data in the json
+            $datos = json_decode(file_get_contents('php://input'),true);
+            $newElement = new UserModel(
+                    $datos["id"],
+                    $datos["user"],
+                    $datos["password"],
+                    $datos["rol"]
+                    );
+            $returnInfo = UserService::save( $link , $newElement );
+            echo $returnInfo;
+        }else{ 
+            returnError(); 
+        } 
+    }
 }
 
 //if all the security filters are pass
