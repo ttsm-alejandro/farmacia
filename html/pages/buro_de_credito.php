@@ -44,6 +44,7 @@ Programmer: Alejandro Aguayo Acosta
                  
                  user='<?php echo $_SESSION["user"]; ?>';
                  token='<?php echo $_SESSION["token"]; ?>';
+                 rol='<?php echo $_SESSION["rol"]; ?>';
                  getData();
                  getCatalogData();
                                            ">
@@ -84,6 +85,7 @@ Programmer: Alejandro Aguayo Acosta
                             <tr>
                                 <th>#</th>
                                 <th>RFC</th>
+                                <th>Razon Social</th>
                                 <th>Nombre de Contacto</th>
                                 <th>Telefono</th>
                             </tr>
@@ -94,14 +96,15 @@ Programmer: Alejandro Aguayo Acosta
                                 >
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ row.rfc }}</td>
+                                <td>{{ row.razonSocial }}</td>
                                 <td>{{ row.nombreContacto }}</td>
                                 <td>{{ row.telefono }}</td>
                             </tr>
                             <tr ng-show="!isAsociadoFilterDisabled">
-                                <td colspan="4" style="text-align: center; background-color: darkseagreen" ng-click="openCatalogWindow( 'asociado' )">Agregar nuevo Asociado</td>
+                                <td colspan="5" style="text-align: center; background-color: darkseagreen" ng-click="openCatalogWindow( 'asociado' )">Agregar nuevo Asociado</td>
                             </tr>
                             <tr ng-show="!isAsociadoFilterDisabled">
-                                <td colspan="4" style="text-align: center; background-color: darkslateblue; color: white" ng-click="getCatalogDataByTable( 'Asociado' )">Recargar Catologo de Asociados</td>
+                                <td colspan="5" style="text-align: center; background-color: darkslateblue; color: white" ng-click="getCatalogDataByTable( 'Asociado' )">Recargar Catologo de Asociados</td>
                             </tr>
                         </table>
                     </div>
@@ -125,6 +128,7 @@ Programmer: Alejandro Aguayo Acosta
                             <tr>
                                 <th>#</th>
                                 <th>RFC</th>
+                                <th>Razon Social</th>
                                 <th>Nombre de Contacto</th>
                                 <th>Telefono</th>
                             </tr>
@@ -135,14 +139,15 @@ Programmer: Alejandro Aguayo Acosta
                                 >
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ row.rfc }}</td>
+                                <td>{{ row.razonSocial }}</td>
                                 <td>{{ row.nombreContacto }}</td>
                                 <td>{{ row.telefono }}</td>
                             </tr>
                             <tr ng-show="!isDeudorFilterDisabled">
-                                <td colspan="4" style="text-align: center; background-color: darkseagreen" ng-click="openCatalogWindow( 'deudor' )">Agregar nuevo Cliente Deudor</td>
+                                <td colspan="5" style="text-align: center; background-color: darkseagreen" ng-click="openCatalogWindow( 'deudor' )">Agregar nuevo Cliente Deudor</td>
                             </tr>
                             <tr ng-show="!isDeudorFilterDisabled">
-                                <td colspan="4" style="text-align: center; background-color: darkslateblue; color: white" ng-click="getCatalogDataByTable( 'Deudor' )">Recargar Catologo de Deudores</td>
+                                <td colspan="5" style="text-align: center; background-color: darkslateblue; color: white" ng-click="getCatalogDataByTable( 'Deudor' )">Recargar Catologo de Deudores</td>
                             </tr>
                         </table>
                     </div>
@@ -203,7 +208,7 @@ Programmer: Alejandro Aguayo Acosta
                             <th>Asociado</th>
                             <th>Cliente</th>
                             <th>Monto</th>
-                            <th>Fecha</th>
+                            <!--th>Fecha</th-->
                             <th>Accion</th>
                         </tr>
                         <tr ng-repeat="row in buroDeCreditoCatalog | filter : { rfcAsociado : filterAsociadoRFC , rfcDeudor : filterDeudorRFC }" 
@@ -223,7 +228,7 @@ Programmer: Alejandro Aguayo Acosta
                                 <!--select ng-model="row.idDeudor" ng-options=" x.id as x.rfc for x in deudorCatalog" ng-disabled="true" class="form-control"></select-->
                             </td>
                             <td><input ng-model="row.monto" ng-disabled="row.disable" ng-change="details.monto = row.monto"></td>
-                            <td>{{ row.fecha }}</td>
+                            <!--td>{{ row.fecha }}</td-->
                             <td>
                                 <div ng-show="!row.disable" class="btn btn-success btn-sm" ng-click="updateRow( row );">Guardar</div>
                                 <div ng-show="!row.disable" class="btn btn-danger btn-sm" ng-click="deleteRow( row );"><span class="glyphicon glyphicon-trash"></span></div>

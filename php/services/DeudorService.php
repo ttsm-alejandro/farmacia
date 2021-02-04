@@ -55,7 +55,13 @@ class DeudorService {
     //post new Element
     static function save( $link , $newElement ){
         $saveOrUpdate = "";
+        
+        $query = "SELECT count(id) FROM deudor WHERE rfc='$newElement->rfc'";
+        $rowCountByRFC = mysqli_fetch_row( mysqli_query( $link, $query ) )[0];
+        
         if( $newElement->id == "--" ){
+            if( $rowCountByRFC == 0 ){
+
             $saveOrUpdate = "INSERT";
             $query = "INSERT INTO "
                         . " deudor ("
@@ -72,6 +78,9 @@ class DeudorService {
                         . "'$newElement->nombreContacto',"
                         . "'$newElement->telefono'"
                     . ")";
+        }else{
+                            $saveOrUpdate = "ALREADYEXIST";
+            }
         }else{
             $saveOrUpdate = "UPDATE";
             $query = "UPDATE "

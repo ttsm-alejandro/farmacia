@@ -44,6 +44,7 @@ Programmer: Alejandro Aguayo Acosta
                  
                  user='<?php echo $_SESSION["user"]; ?>';
                  token='<?php echo $_SESSION["token"]; ?>';
+                 rol='<?php echo $_SESSION["rol"]; ?>';
                  <?php 
                     if( isset( $_GET[ "id" ] ) ){
                         if( !($_GET["id"] == "--") ){

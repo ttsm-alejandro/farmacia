@@ -4,7 +4,7 @@
         <nav class="navbar ">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" style="background-color: {{ oficialBlueColor }}; color:white;" data-toggle="collapse" data-target="#myNavbar">
+                    <button type="button" class="navbar-toggle" style="background-color: #061f5c; color:white;" data-toggle="collapse" data-target="#myNavbar">
                         <strong>MENU</strong>
                     </button>
                     <a href="{{ relativeUrl }}index.php"><img src="{{ relativeUrl }}images/util/logo.png"></a>
@@ -18,7 +18,7 @@
                                 <!-- Catalogos -->
                                 <li><a ng-href="{{ relativeUrl }}html/catalogs/asociado.php">Asociados</a></li>
                                 <li><a ng-href="{{ relativeUrl }}html/catalogs/deudor.php">Clientes / Deudores</a></li>
-                                <li><a ng-href="{{ relativeUrl }}html/catalogs/user.php">Usuarios (solo admin)</a></li>
+                                <li ng-show="{{ rol == 'admin' }}"><a ng-href="{{ relativeUrl }}html/catalogs/user.php">Usuarios</a></li>
                                 <!--li><a ng-href="{{ relativeUrl }}html/catalogs/system.php">System</a></li-->
                                 
                             </ul>

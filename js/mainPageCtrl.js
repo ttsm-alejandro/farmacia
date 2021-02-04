@@ -13,6 +13,7 @@ miApp.controller( 'mainPageCtrl' , function( $scope ){
     //variables
     $scope.user = "";
     $scope.token = "";
+    $scope.rol = "";
     
     //
     $scope.arrayDatos = [

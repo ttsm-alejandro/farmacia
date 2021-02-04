@@ -17,6 +17,7 @@ miApp.controller( 'userPageCtrl'  ,['$scope' , '$http' , '$window' , function( $
     //security
     $scope.user = "";
     $scope.token = "";
+    $scope.rol = "";
     
     //user screen
     $scope.userScreenHeight = "";

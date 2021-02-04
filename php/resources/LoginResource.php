@@ -30,7 +30,8 @@
         $link = mysqli_connect( Constants::$host , Constants::$user, Constants::$pass, Constants::$dataBase );
         $query = " SELECT "
                     . " user,"
-                    . " password "
+                    . " password, "
+                    . " rol "
                 . " FROM "
                     . " user ";
         $result = mysqli_query( $link , $query );
@@ -41,6 +42,7 @@
                 $token = insertToken( $row[ 0 ] , $link );
                 //set the $_SESSION array
                 $_SESSION[ "user" ] = $user;
+                $_SESSION[ "rol" ] = $row[ 2 ];
                 $_SESSION[ "token" ] = $token;
                 
                 $return = TRUE;

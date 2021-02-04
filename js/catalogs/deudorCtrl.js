@@ -17,6 +17,7 @@ miApp.controller( 'deudorCtrl'  ,['$scope' , '$http' , '$window' , function( $sc
     //security
     $scope.user = "";
     $scope.token = "";
+    $scope.rol = "";
     
     //user screen
     $scope.userScreenHeight = "";
@@ -155,7 +156,11 @@ miApp.controller( 'deudorCtrl'  ,['$scope' , '$http' , '$window' , function( $sc
                 $scope.updateLocalData( response.data );
                 if( response.data.includes( "INSERT" ) ){ 
                     swal( { text: "INSERT DONE", icon: "success" } );
-                }else{
+                }
+                if( response.data.includes( "ALREADYEXIST" ) ){ 
+                    swal( { text: "REGISTRO CREADO POR OTRO USUARIO", icon: "success" } );
+                }
+                if( response.data.includes( "UPDATE" ) ){ 
                     swal( { text: "UPDATE DONE", icon: "success" } );
                 }
                 if( isAndNew ){
@@ -175,6 +180,10 @@ miApp.controller( 'deudorCtrl'  ,['$scope' , '$http' , '$window' , function( $sc
     //UPDATE LOCAL DATA
     $scope.updateLocalData = function( responseData ){
         var id = responseData.split( " " )[1];
+        if( responseData.includes( "ALREADYEXIST" ) ){
+            $scope.getData();
+            $scope.getDataById( id );
+        }
         if( responseData.includes( "INSERT" ) ){
             $scope.details.id = id;
             $scope.tableContent.push(

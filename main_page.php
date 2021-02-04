@@ -43,6 +43,7 @@ Programmer: Alejandro Aguayo Acosta
             ng-init="
                 user='<?php echo $_SESSION["user"]; ?>';
                 token='<?php echo $_SESSION["token"]; ?>';
+                rol='<?php echo $_SESSION["rol"]; ?>';
                 initFunction( '<?php echo $_SESSION["user"]; ?>' , '<?php echo $_SESSION["token"]; ?>' );
             ">
             

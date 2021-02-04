@@ -17,6 +17,7 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
     //security
     $scope.user = "";
     $scope.token = "";
+    $scope.rol = "";
     
     //user screen
     $scope.userScreenHeight = "";
@@ -141,7 +142,6 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
     
     //
     $scope.checkIfSelectedAsociadoDeudorExist = function(){
-        console.log( "si la relacion ya existe, poner id/monto/fecha" );
         
         for(var index in $scope.buroDeCreditoCatalog ){
             if( ( $scope.buroDeCreditoCatalog[ index ].idAsociado === $scope.details.idAsociado )
@@ -182,8 +182,12 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
                 $scope.updateLocalData( response.data );
                 if( response.data.includes( "INSERT" ) ){ 
                     swal( { text: "INSERT DONE", icon: "success" } );
-                }else{
+                }
+                if( response.data.includes( "UPDATE" ) ){ 
                     swal( { text: "UPDATE DONE", icon: "success" } );
+                }
+                if( response.data.includes( "ALREADYEXIST" ) ){ 
+                    swal( { text: "REGISTRO CREADO POR OTRO USUARIO", icon: "success" } );
                 }
             }, 
             function(response) { // optional
@@ -199,6 +203,9 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
     //UPDATE LOCAL DATA
     $scope.updateLocalData = function( responseData ){
         var id = responseData.split( " " )[1];
+        if( responseData.includes( "ALREADYEXIST" ) ){
+            $scope.getData();
+        }
         if( responseData.includes( "INSERT" ) ){
             $scope.details.id = id;
             $scope.buroDeCreditoCatalog.push(

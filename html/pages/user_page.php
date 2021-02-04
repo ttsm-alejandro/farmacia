@@ -44,6 +44,7 @@ Programmer: Alejandro Aguayo Acosta
                  
                  user='<?php echo $_SESSION["user"]; ?>';
                  token='<?php echo $_SESSION["token"]; ?>';
+                 rol='<?php echo $_SESSION["rol"]; ?>';
                  details.user = '<?php echo $_SESSION["user"]; ?>';
                                            ">
                 <!-- Header -->

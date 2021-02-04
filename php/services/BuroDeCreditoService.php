@@ -41,7 +41,9 @@ class BuroDeCreditoService {
                     . " id_asociado, "
                     . " id_deudor, "
                     . " monto, "
-                    . " fecha "
+                    . " fecha, "
+                    . " (SELECT rfc FROM asociado WHERE id=id_asociado) as rfc_asociado, "
+                    . " (SELECT rfc FROM deudor WHERE id=id_deudor) as rfc_deudor "
                 . " FROM "
                     . " buro_de_credito "
                 . " WHERE "
@@ -55,7 +57,13 @@ class BuroDeCreditoService {
     //post new Element
     static function save( $link , $newElement ){
         $saveOrUpdate = "";
+        
+        $query = "SELECT count(id) FROM buro_de_credito WHERE id_asociado=$newElement->idAsociado AND id_deudor=$newElement->idDeudor";
+        $rowCountByRFC = mysqli_fetch_row( mysqli_query( $link, $query ) )[0];
+        
         if( $newElement->id == "--" ){
+            if( $rowCountByRFC == 0 ){
+
             $saveOrUpdate = "INSERT";
             $query = "INSERT INTO "
                         . " buro_de_credito ("
@@ -70,6 +78,9 @@ class BuroDeCreditoService {
                         . "'$newElement->monto',"
                         . "'$newElement->fecha'"
                     . ")";
+            }else{
+                $saveOrUpdate = "ALREADYEXIST";
+            }
         }else{
             $saveOrUpdate = "UPDATE";
             $query = "UPDATE "

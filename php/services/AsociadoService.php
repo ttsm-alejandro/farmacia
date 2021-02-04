@@ -55,23 +55,31 @@ class AsociadoService {
     //post new Element
     static function save( $link , $newElement ){
         $saveOrUpdate = "";
+        
+        $query = "SELECT count(id) FROM asociado WHERE rfc='$newElement->rfc'";
+        $rowCountByRFC = mysqli_fetch_row( mysqli_query( $link, $query ) )[0];
+        
         if( $newElement->id == "--" ){
-            $saveOrUpdate = "INSERT";
-            $query = "INSERT INTO "
-                        . " asociado ("
-                            . " razon_social, "
-                            . " rfc, "
-                            . " direccion, "
-                            . " nombre_contacto, "
-                            . " telefono "
-                        . ")"
-                    . " VALUES("
-                        . "'$newElement->razonSocial',"
-                        . "'$newElement->rfc',"
-                        . "'$newElement->direccion',"
-                        . "'$newElement->nombreContacto',"
-                        . "'$newElement->telefono'"
-                    . ")";
+            if( $rowCountByRFC == 0 ){
+                $saveOrUpdate = "INSERT";
+                $query = "INSERT INTO "
+                            . " asociado ("
+                                . " razon_social, "
+                                . " rfc, "
+                                . " direccion, "
+                                . " nombre_contacto, "
+                                . " telefono "
+                            . ")"
+                        . " VALUES("
+                            . "'$newElement->razonSocial',"
+                            . "'$newElement->rfc',"
+                            . "'$newElement->direccion',"
+                            . "'$newElement->nombreContacto',"
+                            . "'$newElement->telefono'"
+                        . ")";
+            }else{
+                $saveOrUpdate = "ALREADYEXIST";
+            }
         }else{
             $saveOrUpdate = "UPDATE";
             $query = "UPDATE "
@@ -85,6 +93,8 @@ class AsociadoService {
                     . " WHERE "
                         . "id=$newElement->id";
         }
+        
+        
         if( AsociadoService::$echoQuery ){ echo "<br>save -> Query: ".$query; }
         mysqli_query( $link , $query );
         $query = "SELECT id FROM asociado WHERE rfc='$newElement->rfc'";
