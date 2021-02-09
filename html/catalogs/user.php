@@ -122,17 +122,17 @@ Programmer: Alejandro Aguayo Acosta
                         <tr><th>Rol:</th><td>
                                 <select ng-model="details.rol" ng-options=" x.name as x.name for x in rolCatalog " class="form-control"></select>
                     </table>
-                    <button class="btn btn-info" ng-click="updateOrSaveRow()" >Save</button>
+                    <button class="btn btn-info" ng-click="updateOrSaveRow()" >Guardar</button>
                     
                     <!-- *C Begin: PHP line for block elements when "?id=" is present in the URL -->
                     <?php if( !isset( $_GET[ "id" ] ) ){ ?>
-                    <button class="btn btn-danger" ng-click="deleteRow()">Delete</button>
+                    <button class="btn btn-danger" ng-click="deleteRow()">Borrar</button>
                     <!-- *C Begin: PHP line for block elements when "?id=" is present in the URL -->
                     <?php } ?>
                     
                     <!-- *D Begin: PHP line for block elements when "?id=" is present in the URL -->
                     <?php if( isset( $_GET[ "id" ] ) ){ ?>
-                    <button class="btn btn-danger" ng-click="closeThisWindow()">Close</button>
+                    <button class="btn btn-danger" ng-click="closeThisWindow()">Cerrar</button>
                     <!-- *D Begin: PHP line for block elements when "?id=" is present in the URL -->
                     <?php } ?>
                     

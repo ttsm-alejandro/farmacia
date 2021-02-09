@@ -235,7 +235,7 @@ miApp.controller( 'deudorCtrl'  ,['$scope' , '$http' , '$window' , function( $sc
     //DELETE
     $scope.deleteRow = function(){
         if( $scope.details.id == "--" ){
-            swal( { text :  "Select System" , icon : "error" } );
+            swal( { text :  "Seleccione un registro" , icon : "error" } );
         }else{
             swal({
                 title: $scope.deleteWarningTitle ,

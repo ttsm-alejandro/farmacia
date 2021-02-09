@@ -106,7 +106,7 @@ Programmer: Alejandro Aguayo Acosta
                                 </tr>
                             </table>
                         </div>
-                        <button class="btn btn-success" ng-click="newRow()">New</button> 
+                        <button class="btn btn-success" ng-click="newRow()">Nuevo</button> 
                     </div>
                 
                 <!-- *B End : -->
@@ -122,18 +122,18 @@ Programmer: Alejandro Aguayo Acosta
                         <tr><th>Nombre del Contacto:</th><td><input ng-model="details.nombreContacto" class="form-control"></td></tr>
                         <tr><th>Telefono:</th><td><input ng-model="details.telefono" class="form-control"></td></tr>
                     </table>
-                    <button class="btn btn-success" ng-click="updateOrSaveRow( true )" >Save and New</button>
-                    <button class="btn btn-info" ng-click="updateOrSaveRow( false )" >Save</button>
+                    <button class="btn btn-success" ng-click="updateOrSaveRow( true )" >Guardar y Nuevo</button>
+                    <button class="btn btn-info" ng-click="updateOrSaveRow( false )" >Guardar</button>
                     
                     <!-- *C Begin: PHP line for block elements when "?id=" is present in the URL -->
                     <?php if( !isset( $_GET[ "id" ] ) ){ ?>
-                    <button class="btn btn-danger" ng-click="deleteRow()">Delete</button>
+                    <button class="btn btn-danger" ng-click="deleteRow()">Borrar</button>
                     <!-- *C Begin: PHP line for block elements when "?id=" is present in the URL -->
                     <?php } ?>
                     
                     <!-- *D Begin: PHP line for block elements when "?id=" is present in the URL -->
                     <?php if( isset( $_GET[ "id" ] ) ){ ?>
-                    <button class="btn btn-danger" ng-click="closeThisWindow()">Close</button>
+                    <button class="btn btn-danger" ng-click="closeThisWindow()">Cerrar</button>
                     <!-- *D Begin: PHP line for block elements when "?id=" is present in the URL -->
                     <?php } ?>
                     

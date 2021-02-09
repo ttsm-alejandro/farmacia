@@ -221,7 +221,7 @@ miApp.controller( 'userCtrl'  ,['$scope' , '$http' , '$window' , function( $scop
     //DELETE
     $scope.deleteRow = function(){
         if( $scope.details.id == "--" ){
-            swal( { text :  "Select System" , icon : "error" } );
+            swal( { text :  "Seleccione un registro" , icon : "error" } );
         }else{
             swal({
                 title: $scope.deleteWarningTitle ,
