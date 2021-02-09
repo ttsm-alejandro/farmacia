@@ -13,10 +13,10 @@ Programmer: Alejandro Aguayo Acosta
 <html>
     <head>
         
-        
         <title>Buro de Credito</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="../../images/util/logo.png">  
         
         <!-- JQuery -->
         <script src="../../js/lib/jquery-3.2.1.min.js"></script>
