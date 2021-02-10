@@ -290,46 +290,6 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
         $scope.details.telefono = "";
     };
 
-    /*
-    //    
-    $scope.getCatalogData = function(){
-        $scope.getCatalogDataByTable( "Company" );
-        $scope.getCatalogDataByTable( "Plant" );
-        $scope.getCatalogDataByTable( "Department" );
-    };
-    
-    //
-    $scope.getCatalogDataByTable = function( tableName ){
-        var tableServiceUrl = serviceUrl + "php/resources/catalogs/" + tableName + "Resource.php";
-        
-        //clean previuos data
-        if( tableName == "Company" ){ $scope.companyCatalog = []; }
-        if( tableName == "Plant" ){ $scope.plantCatalog = []; }
-        if( tableName == "Department" ){ $scope.departmentCatalog = []; }
-        
-        $('#myLoadingModal').modal('show'); 
-        $http({
-            url: tableServiceUrl + "?user=" + $scope.user + "&token=" + $scope.token,
-            method: "GET"
-        })
-        .then(function(response) {
-            if(response.data == "ACCESS DENIED" ){
-                swal( { icon : error , text : "NO ACCESS" } );
-            }
-            for( var index in response.data ){
-                if( tableName == "Company" ){ $scope.companyCatalog[ index ] = response.data[ index ]; }
-                if( tableName == "Plant" ){ $scope.plantCatalog[ index ] = response.data[ index ]; }
-                if( tableName == "Department" ){ $scope.departmentCatalog[ index ] = response.data[ index ]; }
-            }
-            $('#myLoadingModal').modal('hide'); 
-        }, 
-        function(response) { // optional
-            swal( { icon : error , text : "ERROR" } );
-            $('#myLoadingModal').modal('hide'); 
-        });
-    };
-    */
-    
     //
     $scope.isDetailsDataOk = function(){
         var returnData = true;
@@ -397,6 +357,36 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
         return returnData;
     };
     
+    //checar que el RFC cumpla con la homoclave
+    //13 caracteres : 4 letras + 6 numeros + 3 numero y letras
+    //$scope.details.rfc.toUpperCase();
+    $scope.isRFCFisicoOk = function(){
+        var returnData = true;
+        //es de 12 caracteres?
+        if( $scope.details.rfc.length != 13 ){
+            returnData = false;
+        }
+        if( returnData ){
+            var charArray = $scope.details.rfc.split('');
+            if( !$scope.isCharLetter( charArray[0] ) ){ returnData = false; }
+            if( !$scope.isCharLetter( charArray[1] ) ){ returnData = false; }
+            if( !$scope.isCharLetter( charArray[2] ) ){ returnData = false; }
+            if( !$scope.isCharLetter( charArray[3] ) ){ returnData = false; }
+            
+            if( !$scope.isCharNumber( charArray[4] ) ){ returnData = false; }
+            if( !$scope.isCharNumber( charArray[5] ) ){ returnData = false; }
+            if( !$scope.isCharNumber( charArray[6] ) ){ returnData = false; }
+            if( !$scope.isCharNumber( charArray[7] ) ){ returnData = false; }
+            if( !$scope.isCharNumber( charArray[8] ) ){ returnData = false; }
+            if( !$scope.isCharNumber( charArray[9] ) ){ returnData = false; }
+            
+            if( !$scope.isCharLetter( charArray[10] ) && !$scope.isCharNumber( charArray[10] ) ){ returnData = false; }
+            if( !$scope.isCharLetter( charArray[11] ) && !$scope.isCharNumber( charArray[11] ) ){ returnData = false; }
+            if( !$scope.isCharLetter( charArray[12] ) && !$scope.isCharNumber( charArray[12] ) ){ returnData = false; }
+        }
+        return returnData;
+    };
+    
     //verifica que el char c sea numero
     $scope.isCharNumber = function( c ){
         var returnData = false;
@@ -418,7 +408,6 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
         return returnData;
     }
     
-    
     //
     $scope.isRowSelected = function( row ){
         var style = "";
@@ -433,12 +422,4 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
         $window.close();
     };
     
-    //Open new TAB
-    $scope.openCatalogWindow = function( param , id ){
-        if( id == "" || id==null ){
-            swal({ text : "Select a option to EDIT" , icon : "error" });
-        }else{
-            $window.open( $scope.relativeUrl + "html/catalogs/" + param + ".php?id=" + id  , "" , "top=0,left=0,width=800,height=600" );
-        }
-    };
 }]);

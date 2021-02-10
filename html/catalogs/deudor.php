@@ -118,7 +118,7 @@ Programmer: Alejandro Aguayo Acosta
                         <tr><th>ID:</th><td>{{ details.id }}</td></tr>
                         <tr><th>RFC:</th><td><input ng-model="details.rfc" class="form-control"></td></tr>
                         <tr><th>Razon Social:</th><td><input ng-model="details.razonSocial" class="form-control"></td></tr>
-                        <tr><th>Direccion:</th><td><textarea ng-model="details.direccion" class="form-control"></textarea></td></tr>
+                        <tr><th>Direccion:</th><td><textarea rows="5" ng-model="details.direccion" class="form-control"></textarea></td></tr>
                         <tr><th>Nombre del Contacto:</th><td><input ng-model="details.nombreContacto" class="form-control"></td></tr>
                         <tr><th>Telefono:</th><td><input ng-model="details.telefono" class="form-control"></td></tr>
                     </table>

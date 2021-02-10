@@ -41,12 +41,6 @@ miApp.controller( 'deudorCtrl'  ,['$scope' , '$http' , '$window' , function( $sc
         "telefono" : ""
     };
     
-    //catalogs
-    /*$scope.companyCatalog = [];
-    $scope.plantCatalog = [];
-    $scope.departmentCatalog = [];
-    */
-
     //table
     $scope.filterDeudorRFC = "";
     $scope.tableContent = [];
@@ -357,6 +351,36 @@ miApp.controller( 'deudorCtrl'  ,['$scope' , '$http' , '$window' , function( $sc
         return returnData;
     };
     
+    //checar que el RFC cumpla con la homoclave
+    //13 caracteres : 4 letras + 6 numeros + 3 numero y letras
+    //$scope.details.rfc.toUpperCase();
+    $scope.isRFCFisicoOk = function(){
+        var returnData = true;
+        //es de 12 caracteres?
+        if( $scope.details.rfc.length != 13 ){
+            returnData = false;
+        }
+        if( returnData ){
+            var charArray = $scope.details.rfc.split('');
+            if( !$scope.isCharLetter( charArray[0] ) ){ returnData = false; }
+            if( !$scope.isCharLetter( charArray[1] ) ){ returnData = false; }
+            if( !$scope.isCharLetter( charArray[2] ) ){ returnData = false; }
+            if( !$scope.isCharLetter( charArray[3] ) ){ returnData = false; }
+            
+            if( !$scope.isCharNumber( charArray[4] ) ){ returnData = false; }
+            if( !$scope.isCharNumber( charArray[5] ) ){ returnData = false; }
+            if( !$scope.isCharNumber( charArray[6] ) ){ returnData = false; }
+            if( !$scope.isCharNumber( charArray[7] ) ){ returnData = false; }
+            if( !$scope.isCharNumber( charArray[8] ) ){ returnData = false; }
+            if( !$scope.isCharNumber( charArray[9] ) ){ returnData = false; }
+            
+            if( !$scope.isCharLetter( charArray[10] ) && !$scope.isCharNumber( charArray[10] ) ){ returnData = false; }
+            if( !$scope.isCharLetter( charArray[11] ) && !$scope.isCharNumber( charArray[11] ) ){ returnData = false; }
+            if( !$scope.isCharLetter( charArray[12] ) && !$scope.isCharNumber( charArray[12] ) ){ returnData = false; }
+        }
+        return returnData;
+    };
+    
     //verifica que el char c sea numero
     $scope.isCharNumber = function( c ){
         var returnData = false;
@@ -391,14 +415,5 @@ miApp.controller( 'deudorCtrl'  ,['$scope' , '$http' , '$window' , function( $sc
     //
     $scope.closeThisWindow = function(){
         $window.close();
-    };
-    
-    //Open new TAB
-    $scope.openCatalogWindow = function( param , id ){
-        if( id == "" || id==null ){
-            swal({ text : "Select a option to EDIT" , icon : "error" });
-        }else{
-            $window.open( $scope.relativeUrl + "html/catalogs/" + param + ".php?id=" + id  , "" , "top=0,left=0,width=800,height=600" );
-        }
     };
 }]);
