@@ -4,6 +4,12 @@
         header( "Location: ../../index.php" );
         end();
     }
+    
+    if( $_SESSION[ "rol" ] != "admin" ){
+        header( "Location: ../../index.php" );
+        end();
+    }
+    
 ?>
 <!DOCTYPE html>
 <!--

@@ -4,6 +4,11 @@
         header( "Location: ../../index.php" );
         end();
     }
+    
+    if( $_SESSION[ "rol" ] == "consultas" ){
+        header( "Location: ../../index.php" );
+        end();
+    }
 ?>
 <!DOCTYPE html>
 <!--

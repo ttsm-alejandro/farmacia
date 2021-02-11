@@ -1,5 +1,10 @@
 <div class="row">
-    <div class="col-md-12">
+    
+    <div class="col-md-4">
+        <a href="{{ relativeUrl }}index.php"><img src="{{ relativeUrl }}images/util/logo.png"></a>
+    </div>
+    
+    <div class="col-md-8">
         
         <nav class="navbar ">
             <div class="container-fluid">
@@ -7,11 +12,13 @@
                     <button type="button" class="navbar-toggle" style="background-color: #061f5c; color:white;" data-toggle="collapse" data-target="#myNavbar">
                         <strong>MENU</strong>
                     </button>
-                    <a href="{{ relativeUrl }}index.php"><img src="{{ relativeUrl }}images/util/logo.png"></a>
+                    <!--a href="{{ relativeUrl }}index.php"><img src="{{ relativeUrl }}images/util/logo.png"></a-->
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
+                        
+                        <!-- CATALOGOS -->
+                        <li  ng-show="{{ (rol == 'user') || ( rol == 'admin' ) }}" class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#"><br>CATALOGOS &nbsp<span class="caret"></span></a>
                             <ul class="dropdown-menu">
 

@@ -46,6 +46,9 @@ miApp.controller( 'userCtrl'  ,['$scope' , '$http' , '$window' , function( $scop
         },
         {
             name : "user"
+        },
+        {
+            name : "consultas"
         }
                   
     ];

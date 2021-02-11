@@ -168,7 +168,7 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
                 }
             }, 
             function(response) { // optional
-                swal( { text: "FAIL", icon: "error" } );
+                swal( { text: "Error en el servidor, por favor intente mas tarde", icon: "error" } );
                 
                 //waiting screen
                 $('#myLoadingModal').modal('hide'); 
@@ -300,14 +300,12 @@ miApp.controller( 'asociadoCtrl'  ,['$scope' , '$http' , '$window' , function( $
         if( $scope.details.razonSocial === "" ){ returnData = false; errorText += "Debe escribir una RAZON SOCIAL, "; }
         if( $scope.details.rfc === "" ){ returnData = false; errorText += "Escriba el RFC, "; }
         if( $scope.details.direccion === "" ){ returnData = false; errorText += "Escriba la DIRECCION, "; }
-        if( $scope.details.nombreContacto === "" ){ returnData = false; errorText += "Escriba el NOMBRE DEL CONTACTO, "; }
-        if( $scope.details.telefono === "" ){ returnData = false; errorText += "Escriba el TELEFONO, "; }
+        //if( $scope.details.nombreContacto === "" ){ returnData = false; errorText += "Escriba el NOMBRE DEL CONTACTO, "; }
+        //if( $scope.details.telefono === "" ){ returnData = false; errorText += "Escriba el TELEFONO, "; }
         
         if( !$scope.isDataCombinationOk() ){ returnData = false; errorText += "Ya existe un registro con el mismo RFC, "; }
         
-        if( !$scope.isRFCMoralOk() ){ returnData = false; errorText += "El RFC no es valido, "; }
-        
-        
+        if( !$scope.isRFCMoralOk() && !$scope.isRFCFisicoOk() ){ returnData = false; errorText += "El RFC no es valido, "; }
         
         if( !returnData ){
             swal({"text":errorText,"icon":"error"});

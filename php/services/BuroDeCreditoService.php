@@ -24,7 +24,9 @@ class BuroDeCreditoService {
                     . " monto, "
                     . " fecha,"
                     . " (SELECT rfc FROM asociado WHERE id=id_asociado) as rfc_asociado, "
-                    . " (SELECT rfc FROM deudor WHERE id=id_deudor) as rfc_deudor "
+                    . " (SELECT rfc FROM deudor WHERE id=id_deudor) as rfc_deudor, "
+                    . " (SELECT razon_social FROM asociado WHERE id=id_asociado) as razon_social_asociado, "
+                    . " (SELECT razon_social FROM deudor WHERE id=id_deudor) as razon_social_deudor "
                 . "FROM"
                     . " buro_de_credito "
                 . "ORDER BY "
@@ -43,7 +45,9 @@ class BuroDeCreditoService {
                     . " monto, "
                     . " fecha, "
                     . " (SELECT rfc FROM asociado WHERE id=id_asociado) as rfc_asociado, "
-                    . " (SELECT rfc FROM deudor WHERE id=id_deudor) as rfc_deudor "
+                    . " (SELECT rfc FROM deudor WHERE id=id_deudor) as rfc_deudor, "
+                    . " (SELECT razon_social FROM asociado WHERE id=id_asociado) as razon_social_asociado, "
+                    . " (SELECT razon_social FROM deudor WHERE id=id_deudor) as razon_social_deudor "
                 . " FROM "
                     . " buro_de_credito "
                 . " WHERE "
@@ -122,7 +126,9 @@ class BuroDeCreditoService {
                 $row[3],
                 $row[4],
                 $row[5],
-                $row[6]
+                $row[6],
+                $row[7],
+                $row[8]
                 );
         return $newRow;
         

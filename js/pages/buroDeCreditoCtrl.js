@@ -27,6 +27,7 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
     $scope.isWaitingServerResponse = false;
     $scope.showCrearNuevoRegistro = false;
     $scope.showListadoBuroDeCredito = true;
+    $scope.showAsociadoInBuroDeCreditoListaFiltrada = false;
     
     
     //Message texts
@@ -44,12 +45,33 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
         "fecha" : "",
         "rfcAsociado" : "",
         "rfcDeudor" : "",
+        "razonSocialAsociado" : "",
+        "razonSocialDeudor" : "",
+        "showDatosAsociado" : false,
         "disable" : true
     };
     
     //catalogs
     $scope.asociadoCatalog = [];
     $scope.deudorCatalog = [];
+    $scope.fechaCatalog = [
+        {
+            id : "1",
+            name : "1 - 3 meses"
+        },
+        {
+            id : "2",
+            name : "4 - 8 meses"
+        },
+        {
+            id : "3",
+            name : "9 - 12 meses"
+        },
+        {
+            id : "4",
+            name : "12+ meses"
+        }
+    ];
 
     //table
     $scope.filterAsociadoRFC = "";
@@ -116,12 +138,14 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
         if( isAsociado ){
             $scope.details.idAsociado = param.id;
             $scope.details.rfcAsociado = param.rfc;
+            $scope.details.razonSocialAsociado = param.razonSocial;
             $scope.filterAsociadoRFC = param.rfc;
             $scope.isAsociadoFilterDisabled = true;
             if( $scope.isDeudorFilterDisabled ){ $scope.checkIfSelectedAsociadoDeudorExist(); }
         }else{
             $scope.details.idDeudor = param.id;
             $scope.details.rfcDeudor = param.rfc;
+            $scope.details.razonSocialDeudor = param.razonSocial;
             $scope.filterDeudorRFC = param.rfc;
             $scope.isDeudorFilterDisabled = true;
             if( $scope.isAsociadoFilterDisabled ){ $scope.checkIfSelectedAsociadoDeudorExist(); }
@@ -137,6 +161,8 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
         $scope.details.fecha = param.fecha;
         $scope.details.rfcAsociado = param.rfcAsociado;
         $scope.details.rfcDeudor = param.rfcDeudor;
+        $scope.details.razonSocialAsociado = param.razonSocialAsociado;
+        $scope.details.razonSocialDeudor = param.razonSocialDeudor;
         
     };
     
@@ -191,7 +217,7 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
                 }
             }, 
             function(response) { // optional
-                swal( { text: "FAIL", icon: "error" } );
+                swal( { text: "Falla en el servidor, por favor intente mas tarde", icon: "error" } );
                 
                 //waiting screen
                 $('#myLoadingModal').modal('hide'); 
@@ -217,7 +243,10 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
                     fecha : $scope.details.fecha,
                     rfcAsociado : $scope.details.rfcAsociado,
                     rfcDeudor : $scope.details.rfcDeudor,
+                    razonSocialAsociado : $scope.details.razonSocialAsociado,
+                    razonSocialDeudor : $scope.details.razonSocialDeudor,
                     
+                    showDatosAsociado : true,
                     disable : true
                 }
             );
@@ -231,8 +260,11 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
                     $scope.buroDeCreditoCatalog[ index ].fecha = $scope.details.fecha;
                     $scope.buroDeCreditoCatalog[ index ].rfcAsociado = $scope.details.rfcAsociado;
                     $scope.buroDeCreditoCatalog[ index ].rfcDeudor = $scope.details.rfcDeudor;
+                    $scope.buroDeCreditoCatalog[ index ].razonSocialAsociado = $scope.details.razonSocialAsociado;
+                    $scope.buroDeCreditoCatalog[ index ].razonSocialDeudor = $scope.details.razonSocialDeudor;
                     
                     //extra data
+                    $scope.buroDeCreditoCatalog[ index ].showDatosAsociado = true;
                     $scope.buroDeCreditoCatalog[ index ].disable = true;
                 }
             }
@@ -251,7 +283,10 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
                             fecha : temporalTable[ index ].fecha,
                             rfcAsociado : temporalTable[ index ].rfcAsociado,
                             rfcDeudor : temporalTable[ index ].rfcDeudor,
+                            razonSocialAsociado : temporalTable[ index ].razonSocialAsociado,
+                            razonSocialDeudor : temporalTable[ index ].razonSocialDeudor,
                             
+                            showDatosAsociado :  temporalTable[ index ].disable,
                             disable : temporalTable[ index ].disable
                         }
                     );
@@ -416,6 +451,7 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
         if( $scope.details.idAsociado === "" ){ returnData = false; errorText += "Seleccione un ASOCIADO, "; }
         if( $scope.details.idDeudor === "" ){ returnData = false; errorText += "Seleccione un CLIENTE / DEUDOR, "; }
         if( $scope.details.monto === "" ){ returnData = false; errorText += "Ingrese MONTO, "; }
+        if( $scope.details.fecha === "" ){ returnData = false; errorText += "Ingrese FECHA, "; }
         
         if( !returnData ){
             swal({"text":errorText,"icon":"error"});
@@ -480,7 +516,7 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
         
         if( isBuroDeCredito ){
             if( row.id === $scope.details.id ){
-                style = "background-color:" + $scope.oficialBlueColor + "; ";
+                style = "background-color: lightblue;";// + $scope.oficialBlueColor + "; ";
             }
         }else{
             if( isAsociado ){
@@ -504,6 +540,36 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
     
     //Open new TAB
     $scope.openCatalogWindow = function( param ){
-        $window.open( $scope.relativeUrl + "html/catalogs/" + param + ".php?id=--"  , "" , "top=0,left=0,width=800,height=600" );
+        $window.open( $scope.relativeUrl + "html/catalogs/" + param + ".php?id=--"  , "" , "top=250,left=250,width=800,height=600" );
     };
+    
+    //
+    $scope.clicGuardarNuevoRegistro = function(){
+        if( $scope.isDetailsDataOk() ){
+            $scope.isAsociadoFilterDisabled = false;
+            $scope.isDeudorFilterDisabled = false;
+            $scope.updateOrSave();
+        }else{
+            $scope.updateOrSave();
+        }
+    }
+    
+    //
+    $scope.clicCancelarNuevoRegistro = function(){
+        $scope.filterAsociadoRFC='';
+        $scope.filterDeudorRFC='';
+        $scope.isAsociadoFilterDisabled = false;
+        $scope.isDeudorFilterDisabled = false;
+        $scope.showCrearNuevoRegistro = false; 
+        $scope.showListadoBuroDeCredito = true;
+    }
+    
+    //mostrar modal
+    $scope.showModal = function( param ){
+        if( param == "development" ){
+            $('#myDevelopment').modal('show'); 
+        }
+    }
+    
+    
 }]);

@@ -24,9 +24,9 @@ Programmer: Alejandro Aguayo Acosta
         <div class="container">
             <form action="php/resources/LoginResource.php" method="post">
                 <div class="row">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4 text-center"><img src="images/util/logo.png"></div>
-                    <div class="col-md-4"></div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8 text-center"><img src="images/util/logo.png"></div>
+                    <div class="col-md-2"></div>
                 </div>    
                 <div class="row">
                     <div class="col-md-4"></div>

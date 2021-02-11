@@ -32,6 +32,8 @@ if( isset( $_GET[ "user" ] )
     //Security filter
     if( Security::checkUserAndToken( $link , $user, $token ) ){
         
+        $rol = Security::getRolByUser( $link , $user);
+        
         //GET
         if( $_SERVER["REQUEST_METHOD"] === "GET" ){ 
             //Util::insertBitacore( $link , $user, "Person GET request" );
@@ -41,13 +43,13 @@ if( isset( $_GET[ "user" ] )
         //POST
         if( $_SERVER["REQUEST_METHOD"] === "POST" ){ 
             //Util::insertBitacore( $link , $user, "Person POST request" );
-            returnDataPOST( $link ); 
+            returnDataPOST( $link , $rol ); 
         }
         
         //DELETE
         if( $_SERVER["REQUEST_METHOD"] === "DELETE" ){ 
            // Util::insertBitacore( $link , $user, "Person DELETE request" );
-            returnDataDELETE( $link ); 
+            returnDataDELETE( $link , $rol ); 
         }
         mysqli_close( $link );
         
@@ -87,26 +89,36 @@ function getLink(){
 }
 
 //if all the security filters are pass
-function returnDataDELETE( $link ){
-    $id = $_GET[ "id" ];
-    echo BuroDeCreditoService::delete( $link , $id );
+function returnDataDELETE( $link , $rol ){
+    if( ($rol == "admin") || ($rol == "user") ){
+        $id = $_GET[ "id" ];
+        echo BuroDeCreditoService::delete( $link , $id );
+    }else{
+        returnError();
+    }
 }
 
 //if all the security filters are pass
-function returnDataPOST( $link ){
-    //get the data in the json
-    $datos = json_decode(file_get_contents('php://input'),true);
-    $newElement = new BuroDeCreditoModel(
-            $datos["id"],
-            $datos["idAsociado"],
-            $datos["idDeudor"],
-            $datos["monto"],
-            $datos["fecha"],
-            "",
-            ""
-            );
-    $returnInfo = BuroDeCreditoService::save( $link , $newElement );
-    echo $returnInfo;
+function returnDataPOST( $link , $rol ){
+    if( ($rol == "admin") || ($rol == "user") ){
+        //get the data in the json
+        $datos = json_decode(file_get_contents('php://input'),true);
+        $newElement = new BuroDeCreditoModel(
+                $datos["id"],
+                $datos["idAsociado"],
+                $datos["idDeudor"],
+                $datos["monto"],
+                $datos["fecha"],
+                "",
+                "",
+                "",
+                ""
+                );
+        $returnInfo = BuroDeCreditoService::save( $link , $newElement );
+        echo $returnInfo;
+    }else{
+        returnError();
+    }
 }
 
 //if all the security filters are pass

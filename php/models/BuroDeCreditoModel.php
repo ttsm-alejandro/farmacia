@@ -18,8 +18,11 @@ class BuroDeCreditoModel {
     var $monto;
     var $fecha;
     
+    //extra data
     var $rfcAsociado;
     var $rfcDeudor;
+    var $razonSocialAsociado;
+    var $razonSocialDeudor;
     
     //constructor
     function BuroDeCreditoModel(
@@ -29,7 +32,9 @@ class BuroDeCreditoModel {
             $monto,
             $fecha,
             $rfcAsociado,
-            $rfcDeudor
+            $rfcDeudor,
+            $razonSocialAsociado,
+            $razonSocialDeudor
             ){
         $this->id = $id;
         $this->idAsociado = $idAsociado;
@@ -38,5 +43,7 @@ class BuroDeCreditoModel {
         $this->fecha = $fecha;
         $this->rfcAsociado = $rfcAsociado;
         $this->rfcDeudor = $rfcDeudor;
+        $this->razonSocialAsociado = $razonSocialAsociado;
+        $this->razonSocialDeudor = $razonSocialDeudor;
     }
 }
