@@ -13,7 +13,7 @@ Programmer: Alejandro Aguayo Acosta
 <html>
     <head>
         
-        <title>Buro de Credito</title>
+        <title>BURÓ DE CRÉDITO</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" href="../../images/util/logo.png">  
@@ -56,7 +56,7 @@ Programmer: Alejandro Aguayo Acosta
                 
                 <!-- Title -->
                 <h2 style="text-align: center">
-                    Buro de Credito
+                    BURÓ DE CRÉDITO
                 </h2>
             
             <!-- LEYENDA POR FAVOR ESPERE, MOSTRAR CUANDO SE ESPERA RESPUESTA DEL SERVIDOR  -->
@@ -158,7 +158,7 @@ Programmer: Alejandro Aguayo Acosta
                     <div class="row" ng-show="isDeudorFilterDisabled && isAsociadoFilterDisabled">
                         <h3>Monto adeudado</h3>
                         <input ng-model="details.monto">
-                        <h3>Fecha del Adeudo</h3>
+                        <h3>Atraso de</h3>
                         <select ng-model="details.fecha"
                                 ng-options="x.id as x.name for x in fechaCatalog"
                                 ></select>
@@ -198,16 +198,16 @@ Programmer: Alejandro Aguayo Acosta
                     <table class="table table-hover table-condensed">
                         <tr>
                             <th>#</th>
-                            <th>Cliente Deudor</th>
-                            <th>Razon Social</th>
+                            <th>Nombre / Razón Social</th>
+                            <th>RFC</th>
                             <th ng-show="showAsociadoInBuroDeCreditoListaFiltrada">
-                                Asociado
+                                Otorgante del credito
                             </th>
                             <th ng-show="showAsociadoInBuroDeCreditoListaFiltrada">
-                                Razon SocialAsociado
+                                RFC
                             </th>
-                            <th>Monto</th>
-                            <th>Fecha</th>
+                            <th>Saldo Actual</th>
+                            <th>Atraso de</th>
                             <th title="Clic para mostrar / ocultar datos del Asociado">
                                 <span ng-show="!showAsociadoInBuroDeCreditoListaFiltrada" ng-click="showAsociadoInBuroDeCreditoListaFiltrada=true" class="glyphicon glyphicon-eye-open"></span>
                                 <span ng-show="showAsociadoInBuroDeCreditoListaFiltrada" ng-click="showAsociadoInBuroDeCreditoListaFiltrada=false" class="glyphicon glyphicon-eye-close"></span>
@@ -220,20 +220,20 @@ Programmer: Alejandro Aguayo Acosta
                             >
                             <td>{{ $index + 1 }}</td>
                             <td>
-                                <!--input ng-model="row.rfcDeudor" ng-disabled="true" class="form-control"-->
-                                {{ row.rfcDeudor }}
-                            </td>
-                            <td>
                                 <!--input ng-model="row.razonSocialDeudor" ng-disabled="true" class="form-control"-->
                                 {{ row.razonSocialDeudor }}
                             </td>
-                            <td ng-show="showAsociadoInBuroDeCreditoListaFiltrada">
-                                <!--input ng-model="row.rfcAsociado" ng-disabled="true" class="form-control"-->
-                                {{ row.rfcAsociado }}
+                            <td>
+                                <!--input ng-model="row.rfcDeudor" ng-disabled="true" class="form-control"-->
+                                {{ row.rfcDeudor }}
                             </td>
                             <td ng-show="showAsociadoInBuroDeCreditoListaFiltrada">
                                 <!--input ng-model="row.razonSocialAsociado" ng-disabled="true" class="form-control"-->
                                 {{ row.razonSocialAsociado }}
+                            </td>
+                            <td ng-show="showAsociadoInBuroDeCreditoListaFiltrada">
+                                <!--input ng-model="row.rfcAsociado" ng-disabled="true" class="form-control"-->
+                                {{ row.rfcAsociado }}
                             </td>
                             <td>
                                 <input ng-model="row.monto" ng-disabled="row.disable" ng-change="details.monto = row.monto">
