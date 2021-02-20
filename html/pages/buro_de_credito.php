@@ -157,7 +157,7 @@ Programmer: Alejandro Aguayo Acosta
                     <!-- MONTO -->
                     <div class="row" ng-show="isDeudorFilterDisabled && isAsociadoFilterDisabled">
                         <h3>Monto adeudado</h3>
-                        <input ng-model="details.monto">
+                        <input ng-model="details.monto" ng-change="details.monto = montoChange( details.monto )">
                         <h3>Atraso de</h3>
                         <select ng-model="details.fecha"
                                 ng-options="x.id as x.name for x in fechaCatalog"
@@ -236,7 +236,8 @@ Programmer: Alejandro Aguayo Acosta
                                 {{ row.rfcAsociado }}
                             </td>
                             <td>
-                                <input ng-model="row.monto" ng-disabled="row.disable" ng-change="details.monto = row.monto">
+                                <input ng-model="row.monto" ng-show="!row.disable" ng-change="row.monto = montoChange( row.monto ) ">
+                                <div ng-show="row.disable">{{ montoAsCurrency( row.monto ) }}</div>
                             </td>
                             <td>
                                 <select ng-model="row.fecha"

@@ -94,6 +94,41 @@ miApp.controller( 'buroDeCreditoCtrl'  ,['$scope' , '$http' , '$window' , functi
         $scope.userScreenHeight = $scope.userScreenHeight + "px";
         $scope.halfUserScreenHeight = $scope.halfUserScreenHeight + "px";
     };
+    
+    //
+    $scope.montoChange = function( monto ){
+        var returnData = "";
+        for( var index in monto ){
+            if( $scope.isCharNumber( monto[ index ] ) ){
+                returnData += monto[ index ];
+            }
+        }
+        $scope.details.monto = returnData;
+        return returnData;
+    }
+    
+    //12345678 -> $12,345,678
+    $scope.montoAsCurrency = function( monto ){
+        var returnData = "$ ";
+        var longitudMonto = monto.length - 1;
+        var comasTotales = Math.floor( longitudMonto / 3 );
+        var letrasEnMonto = monto.split( "" );
+        var tienePunto = monto.includes( "." );
+        var lugarPrimerComa = ( longitudMonto + 1 ) - ( comasTotales * 3 );
+        
+        for( var index = 0 ; index <= longitudMonto ; index++ ){
+            if( index == lugarPrimerComa ){
+                lugarPrimerComa += 3;
+                if( !((lugarPrimerComa >= longitudMonto)
+                        && (tienePunto))
+                        ){
+                    returnData += ",";
+                }
+            }
+            returnData += letrasEnMonto[ index ];
+        }
+        return returnData;
+    }
         
     //
     $scope.getData = function(){
